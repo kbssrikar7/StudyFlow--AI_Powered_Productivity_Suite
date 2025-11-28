@@ -1,14 +1,55 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from .config import settings
-from .database import create_all_tables
+from .database import create_all_tables, SessionLocal
+from .models.user import User
 from .routers import sessions, snippets, tasks, analytics, ai, auth
+from .services.auth_service import AuthService
+
 
 app = FastAPI(title="Code & Study Dashboard")
 
+
+def ensure_default_admin() -> None:
+    """
+    Ensure there is at least one admin-like user in the system.
+
+    This is primarily to make fresh deployments usable out-of-the-box where
+    no registration has taken place yet (e.g. serverless / demo deployments).
+    The credentials are intentionally simple and should be changed or the user
+    deleted in real production environments.
+    """
+    db = SessionLocal()
+    try:
+        email = "admin@admin.com"
+        password = "admin"
+
+        existing_user = db.query(User).filter(User.email == email).first()
+        if existing_user:
+            return
+
+        hashed_password = AuthService.get_password_hash(password)
+        user = User(
+            email=email,
+            hashed_password=hashed_password,
+            full_name="Admin User",
+        )
+        db.add(user)
+        db.commit()
+        print(f"[startup] Created default admin user: {email} / {password}")
+    except Exception as exc:  # pragma: no cover - best-effort startup hook
+        print(f"[startup] Failed to create default admin user: {exc}")
+    finally:
+        db.close()
+
+
 @app.on_event("startup")
 def on_startup():
+    # Ensure database schema exists
     create_all_tables()
+    # Ensure there is at least one user so login works on fresh deployments
+    ensure_default_admin()
 
 app.add_middleware(
     CORSMiddleware,
