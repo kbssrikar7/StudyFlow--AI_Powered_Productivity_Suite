@@ -10,7 +10,11 @@ class Settings(BaseSettings):
     DB_PATH: str = os.path.join(BASE_DIR, "database", "app_v2.db")
     
     database_url: str = f"sqlite:///{DB_PATH}"
-    cors_origins: List[str] = ["http://localhost:5173", "http://localhost:3000"]
+    cors_origins: List[str] = [
+        "http://localhost:5173", 
+        "http://localhost:3000",
+        "https://*.vercel.app"
+    ]
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     debug: bool = True
