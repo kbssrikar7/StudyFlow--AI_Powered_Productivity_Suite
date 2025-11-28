@@ -6,9 +6,7 @@ backend_path = Path(__file__).parent.parent / "backend"
 sys.path.insert(0, str(backend_path))
 
 from app.main import app
-from mangum import Mangum
 
-# Vercel requires a handler variable for serverless functions
-# Mangum wraps FastAPI to work with AWS Lambda/Vercel's serverless environment
-handler = Mangum(app)
+# Vercel supports FastAPI natively - just export the app
+# The 'app' variable name is what Vercel looks for
 
