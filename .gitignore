@@ -38,3 +38,13 @@ frontend/.output/
 .idea/
 *.log
 
+# Replit
+.pythonlibs
+.upm
+.breakpoints
+.replit.lock
+node_modules/
+dist/
+build/
+__pycache__/
+
