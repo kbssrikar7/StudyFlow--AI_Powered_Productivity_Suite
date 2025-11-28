@@ -72,14 +72,27 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     except Exception as e:
         print(f"Warning: Could not create tables: {e}")
     
-    # For admin login, ensure user exists first
+    # For admin login, ensure user exists first and get the user directly
+    user = None
     if form_data.username == "admin@admin.com":
-        ensure_admin_user_exists(db)
-        # Refresh the session to ensure we can query the newly created user
+        user = ensure_admin_user_exists(db)
         db.commit()
-    
-    # Query for the user
-    user = db.query(User).filter(User.email == form_data.username).first()
+        # If we just created the user, use it directly
+        if user:
+            # Verify the password matches
+            if not AuthService.verify_password(form_data.password, user.hashed_password):
+                print(f"Password verification failed for admin user")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Incorrect username or password",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+        else:
+            # If creation failed, try to query for existing user
+            user = db.query(User).filter(User.email == form_data.username).first()
+    else:
+        # For other users, query normally
+        user = db.query(User).filter(User.email == form_data.username).first()
     
     if not user:
         print(f"User not found: {form_data.username}")
@@ -89,15 +102,16 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Verify password
-    password_valid = AuthService.verify_password(form_data.password, user.hashed_password)
-    if not password_valid:
-        print(f"Password verification failed for user: {form_data.username}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    # Verify password (if we didn't already verify for admin)
+    if form_data.username != "admin@admin.com" or not user:
+        password_valid = AuthService.verify_password(form_data.password, user.hashed_password)
+        if not password_valid:
+            print(f"Password verification failed for user: {form_data.username}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
     
     # Create access token
     access_token_expires = timedelta(minutes=AuthService.ACCESS_TOKEN_EXPIRE_MINUTES)
