@@ -51,9 +51,9 @@ def on_startup():
     # Ensure there is at least one user so login works on fresh deployments
     ensure_default_admin()
 
-# Configure CORS - allow all origins in production (Vercel/Render)
+# Configure CORS - allow all origins in production (Vercel/Render/Fly.io)
 import os
-if os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("RENDER"):
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("RENDER") or os.getenv("FLY_APP_NAME"):
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

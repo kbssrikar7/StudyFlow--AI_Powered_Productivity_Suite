@@ -36,3 +36,7 @@ elif os.getenv("RENDER"):
     settings.cors_origins = ["*"]
     # Use file-based SQLite on Render (persists)
     # For production, consider using Render PostgreSQL
+# For Fly.io or other cloud deployments
+elif os.getenv("FLY_APP_NAME") or os.getenv("PORT"):
+    # Allow all origins for cloud deployments
+    settings.cors_origins = ["*"]
