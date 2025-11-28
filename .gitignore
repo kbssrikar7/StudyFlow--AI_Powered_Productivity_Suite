@@ -1,0 +1,39 @@
+# Python
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+
+# SQLite
+*.db
+*.sqlite3
+
+# Node
+frontend/node_modules/
+node_modules/
+frontend/dist/
+frontend/build/
+frontend/.output/
+
+# General
+.env
+.DS_Store
+.vscode/
+.idea/
+*.log
+

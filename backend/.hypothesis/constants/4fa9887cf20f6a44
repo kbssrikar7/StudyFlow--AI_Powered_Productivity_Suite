@@ -1,0 +1,4 @@
+# file: C:\Users\kbss0000\Documents\Projects\study\backend\app\services\analytics_service.py
+# hypothesis_version: 6.148.3
+
+['date', 'duration', 'recentActivity', 'sessionCount', 'sessionsByTopic', 'totalSessions', 'totalSnippets', 'totalStudyTime']

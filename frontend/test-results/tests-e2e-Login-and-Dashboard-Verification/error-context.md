@@ -1,0 +1,87 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic:
+      - img "Background"
+      - img "Watermark"
+    - complementary [ref=e4]:
+      - img "Batman Logo" [ref=e8]
+      - navigation [ref=e9]:
+        - button "Mission Control Metrics & targets" [ref=e10]:
+          - img [ref=e11]
+          - generic [ref=e16]:
+            - paragraph [ref=e17]: Mission Control
+            - paragraph [ref=e18]: Metrics & targets
+        - button "Focus Mode Deep work timer" [ref=e19]:
+          - img [ref=e20]
+          - generic [ref=e22]:
+            - paragraph [ref=e23]: Focus Mode
+            - paragraph [ref=e24]: Deep work timer
+        - button "Objectives Task board" [ref=e26]:
+          - img [ref=e27]
+          - generic [ref=e30]:
+            - paragraph [ref=e31]: Objectives
+            - paragraph [ref=e32]: Task board
+        - button "Logbook Session history" [ref=e33]:
+          - img [ref=e34]
+          - generic [ref=e38]:
+            - paragraph [ref=e39]: Logbook
+            - paragraph [ref=e40]: Session history
+        - button "Intel Code snippets" [ref=e41]:
+          - img [ref=e42]
+          - generic [ref=e46]:
+            - paragraph [ref=e47]: Intel
+            - paragraph [ref=e48]: Code snippets
+        - button "Alfred AI Assistant" [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e53]:
+            - paragraph [ref=e54]: Alfred
+            - paragraph [ref=e55]: AI Assistant
+        - button "Settings System config" [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - paragraph [ref=e61]: Settings
+            - paragraph [ref=e62]: System config
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - img [ref=e66]
+          - generic [ref=e68]:
+            - paragraph [ref=e69]: Admin User
+            - paragraph [ref=e70]: "ID: ADMIN"
+        - button "Terminate Session" [ref=e71]:
+          - img [ref=e72]
+          - text: Terminate Session
+    - main [ref=e75]:
+      - heading "Focus Mode" [level=2] [ref=e78]
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - heading "Focus Timer" [level=3] [ref=e83]
+          - generic [ref=e84]: READY
+        - generic [ref=e85]:
+          - img [ref=e87]
+          - generic [ref=e90]:
+            - generic [ref=e91]: 25:00
+            - generic [ref=e92]: Set Duration
+        - generic [ref=e93]:
+          - button "Start" [ref=e94]
+          - button "Stop" [ref=e95]
+          - button "Reset" [ref=e96]
+        - generic [ref=e98]:
+          - button "5m" [ref=e99]
+          - button "15m" [ref=e100]
+          - button "25m" [ref=e101]
+          - button "45m" [ref=e102]
+          - button "60m" [ref=e103]
+        - generic [ref=e106]:
+          - button "Gotham Rain" [ref=e107]:
+            - img [ref=e108]
+          - button "Batcave Hum" [ref=e110]:
+            - img [ref=e111]
+          - button "The Batman (2022)" [ref=e113]:
+            - img [ref=e114]
+          - button "The Dark Knight" [ref=e118]:
+            - img [ref=e119]
+  - region "Notifications alt+T"
+```

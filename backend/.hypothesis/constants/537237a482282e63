@@ -1,0 +1,4 @@
+# file: C:\Users\kbss0000\Documents\Projects\study\backend\app\repositories\__init__.py
+# hypothesis_version: 6.148.3
+
+['SessionRepository', 'SnippetRepository']
