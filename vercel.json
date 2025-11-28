@@ -1,4 +1,3 @@
-```json
 {
     "rewrites": [
         {
@@ -8,4 +7,3 @@
     ],
     "outputDirectory": "frontend/dist"
 }
-```
