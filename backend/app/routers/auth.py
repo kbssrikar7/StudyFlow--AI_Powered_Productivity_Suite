@@ -20,11 +20,14 @@ def ensure_admin_user_exists(db: Session):
     
     existing_user = db.query(User).filter(User.email == email).first()
     if existing_user:
+        print(f"Admin user already exists: {email}")
         return existing_user
     
     # Create admin user if it doesn't exist
     try:
+        print(f"Creating admin user: {email}")
         hashed_password = AuthService.get_password_hash(password)
+        print(f"Password hashed successfully")
         user = User(
             email=email,
             hashed_password=hashed_password,
@@ -33,10 +36,13 @@ def ensure_admin_user_exists(db: Session):
         db.add(user)
         db.commit()
         db.refresh(user)
+        print(f"Admin user created successfully: {email}")
         return user
     except Exception as e:
         db.rollback()
         print(f"Failed to create admin user: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -63,20 +69,37 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     # Ensure tables exist (important for serverless)
     try:
         create_all_tables()
-    except:
-        pass
+    except Exception as e:
+        print(f"Warning: Could not create tables: {e}")
     
-    # Ensure admin user exists (lazy creation for serverless)
-    ensure_admin_user_exists(db)
+    # For admin login, ensure user exists first
+    if form_data.username == "admin@admin.com":
+        ensure_admin_user_exists(db)
+        # Refresh the session to ensure we can query the newly created user
+        db.commit()
     
+    # Query for the user
     user = db.query(User).filter(User.email == form_data.username).first()
-    if not user or not AuthService.verify_password(form_data.password, user.hashed_password):
+    
+    if not user:
+        print(f"User not found: {form_data.username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    # Verify password
+    password_valid = AuthService.verify_password(form_data.password, user.hashed_password)
+    if not password_valid:
+        print(f"Password verification failed for user: {form_data.username}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Create access token
     access_token_expires = timedelta(minutes=AuthService.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = AuthService.create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
@@ -86,3 +109,24 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 @router.get("/me", response_model=UserResponse)
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.get("/test-admin")
+def test_admin_creation(db: Session = Depends(get_db)):
+    """Test endpoint to verify admin user creation works."""
+    try:
+        create_all_tables()
+    except Exception as e:
+        return {"error": f"Failed to create tables: {e}"}
+    
+    admin_user = ensure_admin_user_exists(db)
+    db.commit()
+    
+    if admin_user:
+        return {
+            "status": "success",
+            "email": admin_user.email,
+            "full_name": admin_user.full_name,
+            "hashed_password_length": len(admin_user.hashed_password)
+        }
+    else:
+        return {"status": "failed", "error": "Could not create admin user"}
