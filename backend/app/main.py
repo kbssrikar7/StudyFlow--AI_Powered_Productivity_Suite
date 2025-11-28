@@ -51,9 +51,9 @@ def on_startup():
     # Ensure there is at least one user so login works on fresh deployments
     ensure_default_admin()
 
-# Configure CORS - allow all origins in production (Vercel)
+# Configure CORS - allow all origins in production (Vercel/Render)
 import os
-if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("RENDER"):
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

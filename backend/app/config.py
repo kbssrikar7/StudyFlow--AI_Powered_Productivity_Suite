@@ -30,3 +30,9 @@ if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
     # For production, you should use a cloud database like PostgreSQL
     settings.database_url = "sqlite:///:memory:"
     settings.cors_origins = ["*"]
+# For Render deployment
+elif os.getenv("RENDER"):
+    # Allow all origins for Render (frontend will be on Vercel)
+    settings.cors_origins = ["*"]
+    # Use file-based SQLite on Render (persists)
+    # For production, consider using Render PostgreSQL
