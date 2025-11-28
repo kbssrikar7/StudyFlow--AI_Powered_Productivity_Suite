@@ -102,8 +102,8 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Verify password (if we didn't already verify for admin)
-    if form_data.username != "admin@admin.com" or not user:
+    # Verify password (if we didn't already verify for admin above)
+    if form_data.username != "admin@admin.com":
         password_valid = AuthService.verify_password(form_data.password, user.hashed_password)
         if not password_valid:
             print(f"Password verification failed for user: {form_data.username}")
