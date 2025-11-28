@@ -24,7 +24,9 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# For production/serverless (Vercel), allow all origins for CORS
-# This is needed because Vercel generates dynamic URLs
+# For production/serverless (Vercel), configure for serverless environment
 if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+    # Use in-memory SQLite for serverless (data won't persist between requests)
+    # For production, you should use a cloud database like PostgreSQL
+    settings.database_url = "sqlite:///:memory:"
     settings.cors_origins = ["*"]
