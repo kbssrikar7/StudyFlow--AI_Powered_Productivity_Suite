@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://studyflow-aipoweredproductivitysuite-production.up.railway.app';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 class APIError extends Error {
     constructor(message, status, data) {
