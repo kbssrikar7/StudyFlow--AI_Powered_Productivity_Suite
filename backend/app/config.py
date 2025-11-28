@@ -13,7 +13,6 @@ class Settings(BaseSettings):
     cors_origins: List[str] = [
         "http://localhost:5173", 
         "http://localhost:3000",
-        "https://*.vercel.app"
     ]
     api_host: str = "0.0.0.0"
     api_port: int = 8000
@@ -24,3 +23,8 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 settings = Settings()
+
+# For production/serverless (Vercel), allow all origins for CORS
+# This is needed because Vercel generates dynamic URLs
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+    settings.cors_origins = ["*"]

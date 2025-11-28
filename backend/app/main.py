@@ -51,13 +51,24 @@ def on_startup():
     # Ensure there is at least one user so login works on fresh deployments
     ensure_default_admin()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Configure CORS - allow all origins in production (Vercel)
+import os
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,  # Must be False when allow_origins=["*"]
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 app.include_router(sessions.router, prefix="/sessions", tags=["sessions"])
 app.include_router(snippets.router, prefix="/snippets", tags=["snippets"])
