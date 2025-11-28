@@ -1,8 +1,11 @@
+```json
 {
     "rewrites": [
         {
             "source": "/api/(.*)",
             "destination": "/backend/api/index.py"
         }
-    ]
+    ],
+    "outputDirectory": "frontend/dist"
 }
+```
