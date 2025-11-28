@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "buildCommand": "cd frontend && npm install && npm run build",
     "outputDirectory": "frontend/dist",
     "installCommand": "cd frontend && npm install",
@@ -7,10 +8,5 @@
             "source": "/api/(.*)",
             "destination": "/api/index.py"
         }
-    ],
-    "functions": {
-        "api/index.py": {
-            "runtime": "python3.9"
-        }
-    }
+    ]
 }
