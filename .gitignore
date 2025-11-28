@@ -20,8 +20,8 @@ coverage.xml
 .pytest_cache/
 
 # SQLite
-*.db
-*.sqlite3
+# *.db
+# *.sqlite3
 
 # Node
 frontend/node_modules/
