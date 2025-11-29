@@ -39,18 +39,22 @@
   .card {
     background: var(--surface-soft);
     border: 1px solid var(--border-color);
-    border-radius: 1.5rem;
+    border-radius: 0;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(18px);
   }
 
   .card-hover {
-    transition: border-color 0.3s ease, transform 0.3s ease;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card-hover:hover {
     border-color: rgba(207, 10, 10, 0.4);
     transform: translateY(-2px);
+    box-shadow: 
+      0 25px 60px rgba(0, 0, 0, 0.8),
+      0 0 40px rgba(207, 10, 10, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   .btn-primary {
@@ -58,7 +62,7 @@
     color: #ffffff;
     font-weight: 600;
     padding: 0.75rem 1.5rem;
-    border-radius: 999px;
+    border-radius: 0;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(207, 10, 10, 0.3);
   }
@@ -79,7 +83,7 @@
     color: #e5e5e5;
     font-weight: 500;
     padding: 0.75rem 1.5rem;
-    border-radius: 999px;
+    border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -97,7 +101,7 @@
   .btn-ghost {
     color: #a3a3a3;
     padding: 0.5rem 1rem;
-    border-radius: 999px;
+    border-radius: 0;
     transition: all 0.2s ease;
   }
 
@@ -123,7 +127,7 @@
     border: 1px solid var(--border-color);
     color: #ffffff;
     padding: 0.85rem 1rem;
-    border-radius: 1rem;
+    border-radius: 0;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -141,7 +145,7 @@
     display: inline-flex;
     align-items: center;
     padding: 0.25rem 0.85rem;
-    border-radius: 999px;
+    border-radius: 0;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.025em;
@@ -191,7 +195,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: rgba(82, 82, 82, 0.35);
-  border-radius: 999px;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -206,5 +210,186 @@
 *:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(207, 10, 10, 0.35);
-  border-radius: 0.75rem;
+  border-radius: 0;
+}
+
+/* Noise texture overlay for cinematic grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
+
+/* Pulsing glow animation for active states */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(207, 10, 10, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 35px rgba(207, 10, 10, 0.4), 0 0 50px rgba(207, 10, 10, 0.2);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+/* Status indicator with glow */
+@keyframes status-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+  50% { opacity: 0.5; box-shadow: 0 0 4px currentColor; }
+}
+
+.status-glow {
+  animation: status-blink 2s ease-in-out infinite;
+}
+
+/* Glowing accent bar on hover */
+.glow-bar {
+  position: relative;
+}
+
+.glow-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #CF0A0A, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-bar:hover::after {
+  opacity: 1;
+}
+
+/* Subtle red glow effect */
+.red-glow {
+  box-shadow: 0 0 30px rgba(207, 10, 10, 0.15);
+}
+
+.red-glow-hover:hover {
+  box-shadow: 0 0 40px rgba(207, 10, 10, 0.25);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Stagger children animation */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+
+/* Custom range slider styling */
+.slider-red {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 8px;
+  cursor: pointer;
+}
+
+.slider-red::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 8px;
+}
+
+.slider-red::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #CF0A0A;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 12px rgba(207, 10, 10, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin-top: -6px;
+}
+
+.slider-red::-webkit-slider-thumb:hover {
+  background: #ef4444;
+  box-shadow: 0 0 20px rgba(207, 10, 10, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: scale(1.1);
+}
+
+.slider-red::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+}
+
+.slider-red::-moz-range-track {
+  background: transparent;
+  height: 8px;
+}
+
+.slider-red::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #CF0A0A;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 12px rgba(207, 10, 10, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+}
+
+.slider-red::-moz-range-thumb:hover {
+  background: #ef4444;
+  box-shadow: 0 0 20px rgba(207, 10, 10, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.slider-red:focus {
+  outline: none;
+}
+
+.slider-red:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(207, 10, 10, 0.3), 0 0 12px rgba(207, 10, 10, 0.6);
+}
+
+/* GLOBAL HEATMAP ANIMATION KILLER - prevents any blinking */
+.react-calendar-heatmap,
+.react-calendar-heatmap *,
+.react-calendar-heatmap svg,
+.react-calendar-heatmap svg *,
+.react-calendar-heatmap rect,
+.react-calendar-heatmap text,
+.heatmap-container,
+.heatmap-container *,
+[class*="heatmap"],
+[class*="Heatmap"] {
+  transition: none !important;
+  animation: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  will-change: auto !important;
+  transform: none !important;
+}
+
+/* Kill any React re-render animations */
+div[style*="transition"],
+div[style*="animation"] {
+  transition: none !important;
+  animation: none !important;
 }

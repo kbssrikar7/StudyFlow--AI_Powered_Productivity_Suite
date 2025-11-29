@@ -100,14 +100,15 @@ const FocusTimer = ({ onComplete }) => {
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-        <div className="card p-6 flex flex-col items-center justify-center min-h-[360px] bg-black/30 backdrop-blur-sm border border-white/5 rounded-3xl">
+        <div className={`card p-6 flex flex-col items-center justify-center min-h-[360px] bg-black/30 backdrop-blur-sm border border-white/5 transition-all duration-500 ${isRunning ? 'animate-pulse-glow border-red-900/30' : ''}`}>
             {/* Header */}
             <div className="flex items-center justify-between w-full mb-8">
                 <h3 className="text-xl font-bold text-white tracking-tight">Focus Timer</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${isRunning
+                <span className={`px-3 py-1 text-xs font-medium border flex items-center gap-2 ${isRunning
                     ? 'bg-red-500/10 text-red-500 border-red-500/20'
                     : 'bg-zinc-800 text-zinc-400 border-zinc-700'
                     }`}>
+                    {isRunning && <span className="w-1.5 h-1.5 bg-red-500 status-glow" />}
                     {isRunning ? 'ACTIVE' : 'READY'}
                 </span>
             </div>
@@ -189,7 +190,7 @@ const FocusTimer = ({ onComplete }) => {
                         <button
                             key={mins}
                             onClick={() => setDuration(mins)}
-                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${duration === mins
+                            className={`flex-1 py-2 text-sm font-medium transition-all ${duration === mins
                                 ? 'bg-red-600 text-white font-bold'
                                 : 'bg-arkham-light text-zinc-400 hover:text-white hover:bg-zinc-700'
                                 }`}

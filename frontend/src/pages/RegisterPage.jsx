@@ -24,18 +24,18 @@ const RegisterPage = () => {
     return (
         <div className="min-h-screen bg-[#05060a] px-6 py-12">
             <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
-                <div className="rounded-3xl border border-white/5 bg-[rgba(9,12,20,0.85)] p-8 text-white backdrop-blur-lg">
+                <div className=" border border-white/5 bg-[rgba(9,12,20,0.85)] p-8 text-white backdrop-blur-lg">
                     <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Console</p>
                     <h1 className="mt-4 text-4xl font-semibold">Create an account</h1>
                     <p className="mt-4 text-sm text-slate-400">
                         Unlock timers, notes, snippets, and ambient focus tools in a single minimal space.
                     </p>
                     <div className="mt-10 grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                        <div className=" border border-white/10 bg-black/30 p-4">
                             <p className="text-xs text-slate-400">Focus blocks</p>
                             <p className="text-xl font-semibold text-white">Track and review</p>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                        <div className=" border border-white/10 bg-black/30 p-4">
                             <p className="text-xs text-slate-400">Snippet vault</p>
                             <p className="text-xl font-semibold text-white">Save quick notes</p>
                         </div>
@@ -43,9 +43,9 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <div className="w-full max-w-md space-y-8 rounded-3xl border border-white/5 bg-[rgba(8,10,17,0.95)] p-8 backdrop-blur">
+                    <div className="w-full max-w-md space-y-8  border border-white/5 bg-[rgba(8,10,17,0.95)] p-8 backdrop-blur">
                         <div className="flex flex-col items-center gap-3 text-center text-white">
-                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
+                            <div className="flex h-14 w-14 items-center justify-center  border border-white/10 bg-white/10">
                                 <User className="h-6 w-6" />
                             </div>
                             <h2 className="text-3xl font-semibold">Create account</h2>

@@ -41,7 +41,7 @@ const LoginPage = () => {
                 </div>
             </div>
 
-            <div className="w-full max-w-md space-y-8 rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-8 backdrop-blur-xl relative z-10 shadow-[0_0_50px_rgba(207,10,10,0.1)]">
+            <div className="w-full max-w-md space-y-8  border border-white/10 bg-[#0a0a0a]/80 p-8 backdrop-blur-xl relative z-10 shadow-[0_0_50px_rgba(207,10,10,0.1)] fade-in">
                 <div className="flex flex-col items-center gap-6 text-center text-white">
                     <div className="relative group">
                         <div className="absolute inset-0 bg-red-600/20 blur-2xl rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
@@ -64,7 +64,7 @@ const LoginPage = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="block w-full pl-11 pr-4 py-3.5 bg-black/40 border border-white/10 rounded-xl text-slate-200 placeholder-slate-600 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/50 focus:bg-black/60 transition-all text-sm font-medium"
+                                className="block w-full pl-11 pr-4 py-3.5 bg-black/40 border border-white/10  text-slate-200 placeholder-slate-600 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/50 focus:bg-black/60 transition-all text-sm font-medium"
                                 placeholder="agent@waynetech.com"
                                 required
                             />
@@ -81,7 +81,7 @@ const LoginPage = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="block w-full pl-11 pr-4 py-3.5 bg-black/40 border border-white/10 rounded-xl text-slate-200 placeholder-slate-600 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/50 focus:bg-black/60 transition-all text-sm font-medium"
+                                className="block w-full pl-11 pr-4 py-3.5 bg-black/40 border border-white/10  text-slate-200 placeholder-slate-600 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/50 focus:bg-black/60 transition-all text-sm font-medium"
                                 placeholder="••••••••"
                                 required
                             />
@@ -105,7 +105,7 @@ const LoginPage = () => {
                             Register Protocol
                         </Link>
                     </p>
-                    <div className="mt-4 p-3 bg-red-900/20 border border-red-900/30 rounded-lg">
+                    <div className="mt-4 p-3 bg-red-900/20 border border-red-900/30 ">
                         <p className="text-[10px] text-red-400 font-mono mb-1">DEFAULT ACCESS:</p>
                         <p className="text-[10px] text-slate-400 font-mono">ID: admin@admin.com</p>
                         <p className="text-[10px] text-slate-400 font-mono">KEY: admin</p>

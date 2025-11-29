@@ -20,9 +20,10 @@ coverage.xml
 .pytest_cache/
 .antigravity
 
-# SQLite
-# *.db
-# *.sqlite3
+# SQLite Database
+*.db
+*.sqlite3
+backend/database/
 
 # Node
 frontend/node_modules/
@@ -48,3 +49,12 @@ dist/
 build/
 __pycache__/
 
+# Vercel
+.vercel
+.env*.local
+
+# Test results
+frontend/test-results/
+coverage/
+.nyc_output/
+.hypothesis/

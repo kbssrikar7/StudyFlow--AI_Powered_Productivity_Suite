@@ -84,7 +84,7 @@ function AmbiencePlayer() {
     return (
         <div className="flex flex-col items-center space-y-4">
             {/* Sound Toggles */}
-            <div className="bg-[#09090b] border border-white/10 rounded-full p-2 flex items-center space-x-2 shadow-2xl backdrop-blur-sm bg-opacity-95">
+            <div className="bg-[#09090b] border border-white/10 p-2 flex items-center space-x-2 shadow-2xl backdrop-blur-sm bg-opacity-95">
                 {SOUNDS.map((sound) => {
                     const Icon = sound.icon;
                     const isActive = activeSound === sound.id;
@@ -93,7 +93,7 @@ function AmbiencePlayer() {
                             key={sound.id}
                             onClick={() => toggleSound(sound.id)}
                             className={clsx(
-                                "p-3 rounded-full transition-all duration-300 relative group",
+                                "p-3 transition-all duration-300 relative group",
                                 isActive
                                     ? "bg-red-600 text-white shadow-lg shadow-red-600/20 scale-110"
                                     : "text-slate-500 hover:text-red-400 hover:bg-white/5"
@@ -102,7 +102,7 @@ function AmbiencePlayer() {
                         >
                             <Icon className={clsx("w-5 h-5", isLoading && isActive && "animate-pulse")} />
                             {isActive && !isLoading && (
-                                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full border-2 border-[#09090b]" />
+                                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 border-2 border-[#09090b]" />
                             )}
                         </button>
                     );

@@ -13,15 +13,22 @@ router = APIRouter(
     tags=["auth"],
 )
 
+_last_admin_error = None
+
 def ensure_admin_user_exists(db: Session):
     """Ensure admin user exists - called lazily on login attempts."""
+    global _last_admin_error
     email = "admin@admin.com"
     password = "admin"
     
-    existing_user = db.query(User).filter(User.email == email).first()
-    if existing_user:
-        print(f"Admin user already exists: {email}")
-        return existing_user
+    try:
+        existing_user = db.query(User).filter(User.email == email).first()
+        if existing_user:
+            print(f"Admin user already exists: {email}")
+            return existing_user
+    except Exception as e:
+        _last_admin_error = f"Query failed: {str(e)}"
+        return None
     
     # Create admin user if it doesn't exist
     try:
@@ -37,13 +44,18 @@ def ensure_admin_user_exists(db: Session):
         db.commit()
         db.refresh(user)
         print(f"Admin user created successfully: {email}")
+        _last_admin_error = None
         return user
     except Exception as e:
         db.rollback()
+        _last_admin_error = f"Create failed: {str(e)}"
         print(f"Failed to create admin user: {e}")
         import traceback
         traceback.print_exc()
         return None
+
+def get_last_admin_error():
+    return _last_admin_error
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user: UserCreate, db: Session = Depends(get_db)):
@@ -127,20 +139,38 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
 @router.get("/test-admin")
 def test_admin_creation(db: Session = Depends(get_db)):
     """Test endpoint to verify admin user creation works."""
+    import os
+    from ..config import settings
+    
+    debug_info = {
+        "database_url_prefix": settings.database_url[:30] if settings.database_url else "None",
+        "is_vercel": bool(os.getenv("VERCEL")),
+        "has_database_url_env": bool(os.getenv("DATABASE_URL")),
+    }
+    
     try:
         create_all_tables()
+        debug_info["tables_created"] = True
     except Exception as e:
-        return {"error": f"Failed to create tables: {e}"}
+        debug_info["tables_created"] = False
+        debug_info["tables_error"] = str(e)
+        return {"status": "failed", "error": f"Failed to create tables: {e}", "debug": debug_info}
     
-    admin_user = ensure_admin_user_exists(db)
-    db.commit()
-    
-    if admin_user:
-        return {
-            "status": "success",
-            "email": admin_user.email,
-            "full_name": admin_user.full_name,
-            "hashed_password_length": len(admin_user.hashed_password)
-        }
-    else:
-        return {"status": "failed", "error": "Could not create admin user"}
+    try:
+        admin_user = ensure_admin_user_exists(db)
+        db.commit()
+        
+        if admin_user:
+            return {
+                "status": "success",
+                "email": admin_user.email,
+                "full_name": admin_user.full_name,
+                "hashed_password_length": len(admin_user.hashed_password),
+                "debug": debug_info
+            }
+        else:
+            debug_info["admin_error"] = get_last_admin_error()
+            return {"status": "failed", "error": "Could not create admin user", "debug": debug_info}
+    except Exception as e:
+        debug_info["exception"] = str(e)
+        return {"status": "failed", "error": str(e), "debug": debug_info}

@@ -19,6 +19,8 @@ from .config import settings
 
 
 # Configure engine based on database type
+print(f"[database] Initializing with database_url: {settings.database_url[:50]}...")
+
 if settings.database_url.startswith("sqlite"):
     engine = create_engine(
         settings.database_url,
@@ -32,8 +34,14 @@ if settings.database_url.startswith("sqlite"):
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
 else:
-    # PostgreSQL configuration
-    engine = create_engine(settings.database_url)
+    # PostgreSQL configuration (Neon, etc.)
+    # Use pool_pre_ping to handle connection drops in serverless
+    engine = create_engine(
+        settings.database_url,
+        pool_pre_ping=True,
+        pool_recycle=300,
+    )
+    print(f"[database] PostgreSQL engine created")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

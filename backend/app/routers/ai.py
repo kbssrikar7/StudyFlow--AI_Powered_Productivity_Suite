@@ -134,33 +134,90 @@ async def get_motivation(request: MotivationRequest):
             detail=f"Error generating motivation: {str(e)}"
         )
 
+@router.get("/test-groq")
+async def test_groq():
+    """Test Groq API connectivity"""
+    import os
+    import httpx
+    
+    api_key = os.getenv("GROQ_API_KEY")
+    
+    if not api_key:
+        return {"status": "error", "message": "GROQ_API_KEY not found in environment"}
+    
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [{"role": "user", "content": "Say hello"}],
+                    "max_tokens": 50
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "status": "success",
+                    "response": data["choices"][0]["message"]["content"],
+                    "api_key_prefix": api_key[:10] + "..."
+                }
+            else:
+                return {
+                    "status": "error",
+                    "code": response.status_code,
+                    "message": response.text
+                }
+    except Exception as e:
+        return {
+            "status": "error",
+            "exception": str(e),
+            "type": type(e).__name__
+        }
+
 @router.get("/chat")
 async def chat(message: str):
     """Simple chat with AI"""
+    import os
+    import httpx
+    
+    api_key = os.getenv("GROQ_API_KEY")
+    
+    if not api_key:
+        return {"response": "Groq API Key not configured.", "user_message": message}
+    
     try:
-        if not ai_service.client:
-             return {"response": "Groq API Key not configured. Please add GROQ_API_KEY to your .env file.", "user_message": message}
-
-        response = ai_service.client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful study assistant. Keep responses concise and practical."
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
                 },
-                {
-                    "role": "user",
-                    "content": message
+                json={
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [
+                        {"role": "system", "content": "You are a helpful study assistant. Keep responses concise and practical."},
+                        {"role": "user", "content": message}
+                    ],
+                    "max_tokens": 300,
+                    "temperature": 0.7
                 }
-            ],
-            model="llama-3.3-70b-versatile",
-            temperature=0.7,
-            max_tokens=300,
-        )
-        
-        return {
-            "response": response.choices[0].message.content,
-            "user_message": message
-        }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "response": data["choices"][0]["message"]["content"],
+                    "user_message": message
+                }
+            else:
+                return {"response": f"API Error: {response.status_code}", "user_message": message}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

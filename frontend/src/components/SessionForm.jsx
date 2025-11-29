@@ -77,9 +77,9 @@ const SessionForm = ({ onSessionCreated }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-[#09090b] p-6 rounded-xl border border-zinc-800">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-[#09090b] p-6  border border-zinc-800">
             {apiError && (
-                <div className="bg-red-900/20 border border-red-800 text-red-400 px-4 py-3 rounded-lg text-sm">
+                <div className="bg-red-900/20 border border-red-800 text-red-400 px-4 py-3  text-sm">
                     {apiError}
                 </div>
             )}
@@ -95,7 +95,7 @@ const SessionForm = ({ onSessionCreated }) => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className={`w-full bg-zinc-900/50 border ${errors.title ? 'border-red-500' : 'border-zinc-800'} rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all placeholder:text-zinc-600`}
+                    className={`w-full bg-zinc-900/50 border ${errors.title ? 'border-red-500' : 'border-zinc-800'}  px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all placeholder:text-zinc-600`}
                     placeholder="What are you working on?"
                     disabled={isSubmitting}
                 />
@@ -116,7 +116,7 @@ const SessionForm = ({ onSessionCreated }) => {
                         onChange={handleChange}
                         min="1"
                         max="240"
-                        className={`w-full bg-zinc-900/50 border ${errors.duration ? 'border-red-500' : 'border-zinc-800'} rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all`}
+                        className={`w-full bg-zinc-900/50 border ${errors.duration ? 'border-red-500' : 'border-zinc-800'}  px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all`}
                         disabled={isSubmitting}
                     />
                     {errors.duration && <p className="text-xs text-red-500">{errors.duration}</p>}
@@ -130,7 +130,7 @@ const SessionForm = ({ onSessionCreated }) => {
                     <DatePicker
                         selected={formData.startTime}
                         onChange={(date) => setFormData(prev => ({ ...prev, startTime: date }))}
-                        className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all cursor-pointer"
+                        className="w-full bg-zinc-900/50 border border-zinc-800  px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all cursor-pointer"
                         dateFormat="MMM d, yyyy"
                         disabled={isSubmitting}
                     />
@@ -148,7 +148,7 @@ const SessionForm = ({ onSessionCreated }) => {
                     value={formData.description}
                     onChange={handleChange}
                     rows="3"
-                    className={`w-full bg-zinc-900/50 border ${errors.description ? 'border-red-500' : 'border-zinc-800'} rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all placeholder:text-zinc-600 resize-none`}
+                    className={`w-full bg-zinc-900/50 border ${errors.description ? 'border-red-500' : 'border-zinc-800'}  px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-700 transition-all placeholder:text-zinc-600 resize-none`}
                     placeholder="Add some details..."
                     disabled={isSubmitting}
                 />
@@ -158,7 +158,7 @@ const SessionForm = ({ onSessionCreated }) => {
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-zinc-100 text-zinc-900 font-medium py-2.5 rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-zinc-100 text-zinc-900 font-medium py-2.5  hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isSubmitting ? 'Creating...' : 'Create Session'}
             </button>

@@ -35,14 +35,14 @@ const PriorityDropdown = ({ value, onChange }) => {
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="bg-black/40 border border-white/10 rounded-2xl px-4 py-3 text-white/70 focus:outline-none focus:border-red-600/50 flex items-center gap-2 min-w-[120px] justify-between"
+                className="bg-black/40 border border-white/10  px-4 py-3 text-white/70 focus:outline-none focus:border-red-600/50 flex items-center gap-2 min-w-[120px] justify-between"
             >
                 <span className={currentPriority.color}>{currentPriority.label}</span>
                 <ChevronDown className="w-4 h-4 opacity-50" />
             </button>
 
             {isOpen && (
-                <div className="absolute top-full mt-2 left-0 w-full bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden z-[100] shadow-xl">
+                <div className="absolute top-full mt-2 left-0 w-full bg-[#0a0a0a] border border-white/10  overflow-hidden z-[100] shadow-xl">
                     {priorities.map((p) => (
                         <button
                             key={p.value}
@@ -53,7 +53,7 @@ const PriorityDropdown = ({ value, onChange }) => {
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-white/5 text-sm transition-colors flex items-center gap-2"
                         >
-                            <span className={clsx("w-2 h-2 rounded-full",
+                            <span className={clsx("w-2 h-2",
                                 p.value === 'low' ? 'bg-red-300' :
                                     p.value === 'medium' ? 'bg-red-400' : 'bg-red-500'
                             )} />
@@ -88,7 +88,7 @@ const SortableTask = React.memo(({ task, onDelete }) => {
             {...attributes}
             {...listeners}
             className={clsx(
-                "bg-black/40 border border-white/5 p-4 rounded-2xl shadow-arkham group hover:border-red-600/30 hover:shadow-bat-glow transition-all cursor-grab active:cursor-grabbing will-change-transform",
+                "bg-black/40 border border-white/5 p-4  shadow-arkham group hover:border-red-600/30 hover:shadow-bat-glow transition-all cursor-grab active:cursor-grabbing will-change-transform",
                 isDragging ? "opacity-60" : "opacity-100"
             )}
         >
@@ -111,7 +111,7 @@ const SortableTask = React.memo(({ task, onDelete }) => {
             </div>
             <div className="mt-3 flex items-center justify-between">
                 <span className={clsx(
-                    "text-[10px] px-3 py-0.5 rounded-full uppercase tracking-[0.4em] font-bold",
+                    "text-[10px] px-3 py-0.5 uppercase tracking-[0.4em] font-bold",
                     task.priority === 'high' ? "bg-red-900/40 text-red-200 border border-red-800/50" :
                         task.priority === 'medium' ? "bg-red-600/20 text-red-400 border border-red-600/30" :
                             "bg-red-500/10 text-red-300 border border-red-500/20"
@@ -128,10 +128,10 @@ const DroppableColumn = ({ id, title, tasks, onDelete }) => {
     const { setNodeRef } = useDroppable({ id });
 
     return (
-        <div ref={setNodeRef} className="bg-black/30 border border-white/5 rounded-3xl p-4 flex flex-col h-full min-h-[500px]">
+        <div ref={setNodeRef} className="bg-black/30 border border-white/5  p-4 flex flex-col h-full min-h-[500px]">
             <div className="flex items-center justify-between mb-6">
                 <h3 className="font-semibold text-white text-xs uppercase tracking-[0.5em]">{title}</h3>
-                <span className="bg-white/5 text-white/70 text-xs px-3 py-1 rounded-full border border-white/10">{tasks.length}</span>
+                <span className="bg-white/5 text-white/70 text-xs px-3 py-1 border border-white/10">{tasks.length}</span>
             </div>
 
             <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
@@ -140,7 +140,7 @@ const DroppableColumn = ({ id, title, tasks, onDelete }) => {
                         <SortableTask key={task.id} task={task} onDelete={onDelete} />
                     ))}
                     {tasks.length === 0 && (
-                        <div className="h-full border-2 border-dashed border-white/10 rounded-2xl flex items-center justify-center text-white/30 text-sm uppercase tracking-[0.4em]">
+                        <div className="h-full border-2 border-dashed border-white/10  flex items-center justify-center text-white/30 text-sm uppercase tracking-[0.4em]">
                             Drop here
                         </div>
                     )}
@@ -252,11 +252,11 @@ function TaskBoard() {
             onDragEnd={handleDragEnd}
         >
             <div className="h-full flex flex-col space-y-6">
-                <form onSubmit={handleCreateTask} className="flex flex-wrap gap-4 bg-black/30 border border-white/5 rounded-3xl p-4">
+                <form onSubmit={handleCreateTask} className="flex flex-wrap gap-4 bg-black/30 border border-white/5  p-4">
                     <input
                         type="text"
                         placeholder="Log a new mission..."
-                        className="flex-1 min-w-[200px] bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-red-600/50"
+                        className="flex-1 min-w-[200px] bg-transparent border border-white/10  px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-red-600/50"
                         value={newTask.title}
                         onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                     />
@@ -268,7 +268,7 @@ function TaskBoard() {
 
                     <button
                         type="submit"
-                        className="btn-primary flex items-center gap-2 px-6 py-3 rounded-2xl"
+                        className="btn-primary flex items-center gap-2 px-6 py-3 "
                     >
                         <Plus className="w-4 h-4" />
                         Add
@@ -283,7 +283,7 @@ function TaskBoard() {
 
                 <DragOverlay>
                     {activeId ? (
-                        <div className="bg-black/80 border border-white/10 p-4 rounded-2xl shadow-bat-glow opacity-80 rotate-2 cursor-grabbing">
+                        <div className="bg-black/80 border border-white/10 p-4  shadow-bat-glow opacity-80 rotate-2 cursor-grabbing">
                             <h4 className="text-sm font-medium text-white">
                                 {tasks.find(t => t.id == activeId)?.title}
                             </h4>

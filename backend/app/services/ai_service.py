@@ -7,10 +7,31 @@ from ..config import settings
 
 class AIService:
     def __init__(self):
-        # Graceful handling if API key is missing
-        api_key = settings.groq_api_key
-        self.client = Groq(api_key=api_key) if api_key else None
+        self._client = None
         self.model = "llama-3.3-70b-versatile"  # Fast and powerful
+    
+    @property
+    def client(self):
+        """Lazy initialization of Groq client to ensure env vars are loaded."""
+        if self._client is None:
+            # Try environment variable first, then settings
+            api_key = os.getenv("GROQ_API_KEY") or settings.groq_api_key
+            if api_key:
+                try:
+                    import httpx
+                    # Configure with longer timeout for serverless
+                    self._client = Groq(
+                        api_key=api_key,
+                        timeout=httpx.Timeout(30.0, connect=10.0)
+                    )
+                    print(f"[ai_service] Groq client initialized with API key: {api_key[:10]}...")
+                except Exception as e:
+                    print(f"[ai_service] Error initializing Groq client: {e}")
+                    # Try without custom timeout
+                    self._client = Groq(api_key=api_key)
+            else:
+                print(f"[ai_service] No GROQ_API_KEY found in env or settings")
+        return self._client
         
     async def analyze_study_pattern(self, sessions: List[Dict]) -> str:
         """Analyze study patterns and provide insights"""

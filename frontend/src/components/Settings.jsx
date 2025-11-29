@@ -40,7 +40,7 @@ function Settings() {
 
     return (
         <div className="max-w-2xl mx-auto space-y-8">
-            <div className="bg-[#09090b] border border-zinc-800 rounded-xl p-6 shadow-sm">
+            <div className="bg-[#09090b] border border-zinc-800  p-6 shadow-sm">
                 <div className="flex items-center space-x-2 mb-6 text-zinc-100">
                     <User className="w-5 h-5" />
                     <h2 className="text-lg font-bold tracking-tight">Profile Settings</h2>
@@ -53,33 +53,33 @@ function Settings() {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full p-3 bg-zinc-900 text-zinc-100 rounded-md border border-zinc-800 focus:border-zinc-600 focus:ring-0 transition-all outline-none placeholder:text-zinc-600"
+                            className="w-full p-3 bg-zinc-900 text-zinc-100  border border-zinc-800 focus:border-zinc-600 focus:ring-0 transition-all outline-none placeholder:text-zinc-600"
                         />
                     </div>
                 </div>
             </div>
 
-            <div className="bg-[#09090b] border border-zinc-800 rounded-xl p-6 shadow-sm">
+            <div className="bg-[#09090b] border border-zinc-800  p-6 shadow-sm">
                 <div className="flex items-center space-x-2 mb-6 text-zinc-100">
                     <Bell className="w-5 h-5" />
                     <h2 className="text-lg font-bold tracking-tight">Preferences</h2>
                 </div>
 
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                    <div className="flex items-center justify-between p-3 bg-zinc-900/50  border border-zinc-800">
                         <div className="flex items-center space-x-3">
                             <Bell className="w-4 h-4 text-zinc-400" />
                             <span className="text-sm text-zinc-200">Enable Notifications</span>
                         </div>
                         <button
                             onClick={handleNotificationToggle}
-                            className={`w-10 h-5 rounded-full transition-colors relative ${notifications ? 'bg-zinc-100' : 'bg-zinc-700'}`}
+                            className={`w-10 h-5 transition-colors relative ${notifications ? 'bg-zinc-100' : 'bg-zinc-700'}`}
                         >
-                            <div className={`absolute top-1 w-3 h-3 rounded-full bg-black transition-all ${notifications ? 'left-6' : 'left-1'}`} />
+                            <div className={`absolute top-1 w-3 h-3 bg-black transition-all ${notifications ? 'left-6' : 'left-1'}`} />
                         </button>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                    <div className="flex items-center justify-between p-3 bg-zinc-900/50  border border-zinc-800">
                         <div className="flex items-center space-x-3">
                             <Moon className="w-4 h-4 text-zinc-400" />
                             <span className="text-sm text-zinc-200">Dark Mode</span>
@@ -89,7 +89,7 @@ function Settings() {
                 </div>
             </div>
 
-            <button className="flex items-center space-x-2 bg-zinc-100 hover:bg-white text-zinc-900 px-6 py-2 rounded-md font-bold transition-colors shadow-sm">
+            <button className="flex items-center space-x-2 bg-zinc-100 hover:bg-white text-zinc-900 px-6 py-2  font-bold transition-colors shadow-sm">
                 <Save className="w-4 h-4" />
                 <span>Save Changes</span>
             </button>
