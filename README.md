@@ -375,5 +375,3 @@ MIT License - See LICENSE file for details.
 ## Author
 
 **Kasilanka Bhoopesh Siva Srikar**
-
-Submitted for: ProU Technology - Track 3 Full-stack Development Assessment
