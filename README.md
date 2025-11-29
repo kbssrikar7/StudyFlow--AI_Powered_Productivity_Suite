@@ -245,34 +245,44 @@ Open `http://localhost:5173` in your browser and login with:
 ## Screenshots
 
 ### Login Page
-The login page features a dark theme with the application branding.
+Secure authentication with Batman-themed dark UI.
 
-### Dashboard (Mission Control)
-The main dashboard displays:
-- Focus Timer with ambient sound controls
-- Session statistics with activity heatmap
-- Quick access to all features
+![Login Page](screenshots/login.png)
 
-### Task Board (Objectives)
-Kanban-style task management with three columns:
-- To Do
-- In Progress
-- Done
+### Mission Control (Dashboard)
+Statistics overview with activity heatmap and streak tracking.
 
-Tasks can be dragged between columns and include priority indicators.
+![Mission Control](screenshots/mission-control.png)
 
-### Code Snippets (Intel)
-Code snippet manager with:
-- Monaco Editor for syntax highlighting
-- Spaced repetition tracking
-- Tag-based organization
+### Focus Mode (Timer)
+Pomodoro-style focus timer with ambient sound controls.
 
-### AI Assistant (Alfred)
-AI-powered assistant featuring:
-- Chat interface for study questions
-- Code explanation tool
-- Study plan generator
-- Task breakdown utility
+![Focus Timer](screenshots/focus-timer.png)
+
+### Objectives (Task Board)
+Kanban-style task management with drag-and-drop functionality.
+
+![Objectives](screenshots/objectives.png)
+
+### Logbook (Session History)
+Track and review past study sessions.
+
+![Logbook](screenshots/logbook.png)
+
+### Intel (Code Snippets)
+Code snippet manager with Monaco Editor and spaced repetition tracking.
+
+![Intel](screenshots/intel.png)
+
+### Alfred (AI Assistant)
+AI-powered assistant with chat, code explanation, study plan generation, and task breakdown features. Powered by Groq API.
+
+![Alfred](screenshots/alfred.png)
+
+### Settings
+System configuration and user preferences.
+
+![Settings](screenshots/settings.png)
 
 ---
 
