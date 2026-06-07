@@ -42,33 +42,33 @@ def client(tmp_path: Path) -> TestClient:
 
 def test_snippet_crud_flow(client: TestClient) -> None:
     response = client.post(
-        "/snippets/",
+        "/api/snippets/",
         json={"title": "Example", "content": "print('hi')", "tags": "python"},
     )
     assert response.status_code == 201
     snippet_id = response.json()["id"]
 
-    list_response = client.get("/snippets/")
+    list_response = client.get("/api/snippets/")
     assert list_response.status_code == 200
     assert len(list_response.json()) == 1
 
-    detail_response = client.get(f"/snippets/{snippet_id}")
+    detail_response = client.get(f"/api/snippets/{snippet_id}")
     assert detail_response.status_code == 200
 
     update_response = client.put(
-        f"/snippets/{snippet_id}",
+        f"/api/snippets/{snippet_id}",
         json={"title": "Updated"},
     )
     assert update_response.status_code == 200
     assert update_response.json()["title"] == "Updated"
 
-    delete_response = client.delete(f"/snippets/{snippet_id}")
+    delete_response = client.delete(f"/api/snippets/{snippet_id}")
     assert delete_response.status_code == 204
 
 
 def test_sessions_crud_flow(client: TestClient) -> None:
     response = client.post(
-        "/sessions/",
+        "/api/sessions/",
         json={
             "title": "FastAPI Study",
             "duration": 90,
@@ -78,36 +78,36 @@ def test_sessions_crud_flow(client: TestClient) -> None:
     assert response.status_code == 201
     session_id = response.json()["id"]
 
-    list_response = client.get("/sessions/")
+    list_response = client.get("/api/sessions/")
     assert list_response.status_code == 200
     assert len(list_response.json()) == 1
 
-    detail_response = client.get(f"/sessions/{session_id}")
+    detail_response = client.get(f"/api/sessions/{session_id}")
     assert detail_response.status_code == 200
 
     update_response = client.put(
-        f"/sessions/{session_id}",
+        f"/api/sessions/{session_id}",
         json={"duration": 120},
     )
     assert update_response.status_code == 200
     assert update_response.json()["duration"] == 120
 
-    delete_response = client.delete(f"/sessions/{session_id}")
+    delete_response = client.delete(f"/api/sessions/{session_id}")
     assert delete_response.status_code == 204
 
 
 def test_analytics_endpoint(client: TestClient) -> None:
     client.post(
-        "/snippets/",
+        "/api/snippets/",
         json={"title": "Snippet", "content": "code", "tags": "test"},
     )
     client.post(
-        "/sessions/",
+        "/api/sessions/",
         json={"title": "React Study", "duration": 60, "description": ""},
     )
-    analytics = client.get("/analytics/").json()
-    assert analytics["totalSnippets"] == 1
-    assert analytics["totalSessions"] == 1
-    assert analytics["totalStudyTime"] == 60
+    analytics = client.get("/api/analytics/").json()
+    assert analytics["total_snippets"] == 1
+    assert analytics["total_sessions"] == 1
+    assert analytics["total_study_time"] == 60
 
 

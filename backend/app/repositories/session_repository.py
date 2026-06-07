@@ -51,15 +51,6 @@ class SessionRepository:
         stmt = select(func.coalesce(func.sum(SessionModel.duration), 0))
         return int(self.db.execute(stmt).scalar() or 0)
 
-    def get_sessions_by_topic(self) -> list[dict[str, Any]]:
-        # Assuming topic is not yet in model, returning empty or removing if not needed.
-        # But keeping structure if it was intended.
-        # If topic doesn't exist in model, this will fail too.
-        # Checking model... Session model has no topic.
-        # I will comment this out or remove it to avoid errors if called.
-        # But get_stats doesn't call it.
-        return []
-
     def get_daily_activity(self) -> list[dict[str, Any]]:
         stmt = (
             select(
