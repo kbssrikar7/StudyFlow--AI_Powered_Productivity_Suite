@@ -35,15 +35,14 @@ async function handleResponse(response) {
 
 export const api = {
     async get(endpoint) {
-        const token = localStorage.getItem('token');
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
         };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'GET',
                 headers,
+                credentials: 'include',
             });
             return handleResponse(response);
         } catch (error) {
@@ -53,15 +52,14 @@ export const api = {
     },
 
     async post(endpoint, data) {
-        const token = localStorage.getItem('token');
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
         };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'POST',
                 headers,
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             return handleResponse(response);
@@ -85,6 +83,7 @@ export const api = {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'POST',
                 headers,
+                credentials: 'include',
                 body: formData,
             });
             return handleResponse(response);
@@ -95,15 +94,14 @@ export const api = {
     },
 
     async put(endpoint, data) {
-        const token = localStorage.getItem('token');
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
         };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'PUT',
                 headers,
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             return handleResponse(response);
@@ -114,15 +112,14 @@ export const api = {
     },
 
     async delete(endpoint) {
-        const token = localStorage.getItem('token');
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
         };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'DELETE',
                 headers,
+                credentials: 'include',
             });
             return handleResponse(response);
         } catch (error) {

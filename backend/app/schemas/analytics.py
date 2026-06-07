@@ -10,20 +10,20 @@ from pydantic import BaseModel, Field
 class TopicBreakdown(BaseModel):
     topic: str
     count: int = Field(ge=0)
-    totalDuration: int = Field(ge=0)
+    total_duration: int = Field(ge=0)
 
 
 class ActivityPoint(BaseModel):
     date: date
-    sessionCount: int = Field(ge=0)
+    session_count: int = Field(ge=0)
     duration: int = Field(ge=0)
 
 
 class AnalyticsResponse(BaseModel):
-    totalSnippets: int = Field(ge=0)
-    totalSessions: int = Field(ge=0)
-    totalStudyTime: int = Field(ge=0)
-    sessionsByTopic: list[TopicBreakdown]
-    recentActivity: list[ActivityPoint]
+    total_snippets: int = Field(ge=0)
+    total_sessions: int = Field(ge=0)
+    total_study_time: int = Field(ge=0)
+    sessions_by_topic: list[TopicBreakdown]
+    recent_activity: list[ActivityPoint]
 
 

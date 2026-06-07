@@ -358,6 +358,18 @@ npm run test:e2e    # End-to-end tests
 
 ---
 
+## Setting up Google OAuth
+
+This project uses Google Sign-In for authentication. You will need to create OAuth credentials in the Google Cloud Console.
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a new project or select an existing one.
+3. Navigate to **APIs & Services** > **Credentials**.
+4. Click **Create Credentials** > **OAuth client ID**.
+5. Select **Web application** as the application type.
+6. Add your frontend URL (e.g., `http://localhost:5173`) to the **Authorized JavaScript origins**.
+7. Copy the generated **Client ID**.
+
 ## Environment Variables
 
 ### Backend
@@ -367,12 +379,14 @@ npm run test:e2e    # End-to-end tests
 | SECRET_KEY | JWT signing key | Yes |
 | DATABASE_URL | PostgreSQL connection string | Production only |
 | GROQ_API_KEY | Groq API key for AI features | No |
+| GOOGLE_CLIENT_ID | Your Google OAuth Client ID | Yes |
 
 ### Frontend
 
 | Variable | Description | Required |
 |----------|-------------|----------|
 | VITE_API_URL | Backend API URL | Production only |
+| VITE_GOOGLE_CLIENT_ID | Your Google OAuth Client ID | Yes |
 
 ---
 

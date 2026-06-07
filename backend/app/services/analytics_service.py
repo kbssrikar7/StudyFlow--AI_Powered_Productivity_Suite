@@ -22,18 +22,17 @@ class AnalyticsService:
         total_snippets = self.snippet_repo.count_all()
         total_sessions = len(sessions)
         total_study_time = sum(session.duration for session in sessions)
-        sessions_by_topic = self.session_repo.get_sessions_by_topic()
         recent_activity = self._build_recent_activity(sessions)
         return {
-            "totalSnippets": total_snippets,
-            "totalSessions": total_sessions,
-            "totalStudyTime": total_study_time,
-            "sessionsByTopic": sessions_by_topic,
-            "recentActivity": recent_activity,
+            "total_snippets": total_snippets,
+            "total_sessions": total_sessions,
+            "total_study_time": total_study_time,
+            "sessions_by_topic": [],
+            "recent_activity": recent_activity,
         }
 
     def _build_recent_activity(self, sessions) -> list[dict[str, Any]]:
-        activity = defaultdict(lambda: {"sessionCount": 0, "duration": 0})
+        activity = defaultdict(lambda: {"session_count": 0, "duration": 0})
         for session in sessions:
             # Use created_at instead of date, and ensure it's a date object
             if hasattr(session, 'created_at') and session.created_at:
@@ -43,7 +42,7 @@ class AnalyticsService:
             else:
                 continue
 
-            activity[activity_date]["sessionCount"] += 1
+            activity[activity_date]["session_count"] += 1
             activity[activity_date]["duration"] += session.duration
         return [
             {"date": activity_date, **metrics}
