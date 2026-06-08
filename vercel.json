@@ -17,5 +17,16 @@
         "api/index.py": {
             "includeFiles": "backend/**"
         }
-    }
+    },
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Cross-Origin-Opener-Policy",
+                    "value": "same-origin-allow-popups"
+                }
+            ]
+        }
+    ]
 }
