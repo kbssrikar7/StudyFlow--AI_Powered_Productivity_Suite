@@ -22,12 +22,16 @@ class SnippetRepository:
         self.db.refresh(snippet)
         return snippet
 
-    def find_all(self) -> list[Snippet]:
-        stmt: Select[tuple[Snippet]] = select(Snippet).order_by(Snippet.created_at.desc())
+    def find_all(self, user_id: int) -> list[Snippet]:
+        stmt: Select[tuple[Snippet]] = (
+            select(Snippet)
+            .where(Snippet.user_id == user_id)
+            .order_by(Snippet.created_at.desc())
+        )
         return list(self.db.scalars(stmt).all())
 
-    def find_by_id(self, snippet_id: int) -> Snippet | None:
-        stmt = select(Snippet).where(Snippet.id == snippet_id)
+    def find_by_id(self, snippet_id: int, user_id: int) -> Snippet | None:
+        stmt = select(Snippet).where(Snippet.id == snippet_id, Snippet.user_id == user_id)
         return self.db.scalars(stmt).first()
 
     def update(self, snippet: Snippet, data: dict[str, Any]) -> Snippet:
@@ -43,13 +47,11 @@ class SnippetRepository:
         self.db.delete(snippet)
         self.db.flush()
 
-    def count_all(self) -> int:
-        stmt = select(func.count(Snippet.id))
+    def count_all(self, user_id: int) -> int:
+        stmt = select(func.count(Snippet.id)).where(Snippet.user_id == user_id)
         return int(self.db.execute(stmt).scalar() or 0)
 
-    def find_by_tag(self, tag: str) -> list[Snippet]:
+    def find_by_tag(self, tag: str, user_id: int) -> list[Snippet]:
         pattern = f"%{tag}%"
-        stmt = select(Snippet).where(Snippet.tags.ilike(pattern))
+        stmt = select(Snippet).where(Snippet.tags.ilike(pattern), Snippet.user_id == user_id)
         return list(self.db.scalars(stmt).all())
-
-

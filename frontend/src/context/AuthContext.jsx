@@ -13,59 +13,65 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const checkAuth = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                // Verify token and get user data
-                // For now, we'll just assume token is valid if it exists, 
-                // but ideally we should hit /auth/me
-                const userData = await api.get('/auth/me');
-                setUser(userData);
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                localStorage.removeItem('token');
-                setUser(null);
-            }
+        try {
+            const userData = await api.get('/auth/me');
+            setUser(userData);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
-    const login = async (email, password) => {
+    const login = async (credential) => {
         try {
-            // Use postForm for OAuth2 password flow (x-www-form-urlencoded)
-            const data = await api.postForm('/auth/login', { username: email, password });
-            localStorage.setItem('token', data.access_token);
-            await checkAuth();
-            toast.success('Welcome back');
+            const data = await api.post('/auth/google', { credential });
+            setUser(data.user);
+            toast.success('Welcome back!');
             return true;
         } catch (error) {
             console.error('Login failed:', error);
-            toast.error('Login failed. Check your credentials.');
+            toast.error('Login failed. Please try again.');
             return false;
         }
     };
 
-    const register = async (email, password, fullName) => {
+    const loginWithEmail = async (email, password) => {
         try {
-            await api.post('/auth/register', { email, password, full_name: fullName });
-            // Auto login after register
-            await login(email, password);
-            return true;
+            const data = await api.post('/auth/login', { email, password });
+            setUser(data.user);
+            toast.success('Welcome back!');
+            return { success: true };
         } catch (error) {
-            console.error('Registration failed:', error);
-            toast.error('Registration failed. Email might be taken.');
-            return false;
+            const msg = error?.message || 'Login failed. Please try again.';
+            toast.error(msg);
+            return { success: false, message: msg };
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
+    const register = async (username, email, password) => {
+        try {
+            const data = await api.post('/auth/register', { username, email, password });
+            return { success: true, message: data.message, email };
+        } catch (error) {
+            const msg = error?.message || 'Registration failed. Please try again.';
+            toast.error(msg);
+            return { success: false, message: msg };
+        }
+    };
+
+    const logout = async () => {
+        try {
+            await api.post('/auth/logout', {});
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
         setUser(null);
         toast.info('Logged out');
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, loginWithEmail, register, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

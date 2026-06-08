@@ -58,3 +58,9 @@ frontend/test-results/
 coverage/
 .nyc_output/
 .hypothesis/
+
+# Credentials - never commit
+jules_api.txt
+neon_api.txt
+client_secret*.json
+*.credentials.json

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, String, Text, func
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from ..database import Base
@@ -37,5 +37,6 @@ class Snippet(Base):
         DateTime(timezone=True), nullable=True
     )
     repetition_level: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, index=True)
 
 

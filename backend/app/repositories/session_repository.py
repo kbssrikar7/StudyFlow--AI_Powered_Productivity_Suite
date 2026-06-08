@@ -22,12 +22,19 @@ class SessionRepository:
         self.db.refresh(session)
         return session
 
-    def find_all(self) -> list[SessionModel]:
-        stmt: Select[tuple[SessionModel]] = select(SessionModel).order_by(SessionModel.created_at.desc())
+    def find_all(self, user_id: int) -> list[SessionModel]:
+        stmt: Select[tuple[SessionModel]] = (
+            select(SessionModel)
+            .where(SessionModel.user_id == user_id)
+            .order_by(SessionModel.created_at.desc())
+        )
         return list(self.db.scalars(stmt).all())
 
-    def find_by_id(self, session_id: int) -> SessionModel | None:
-        stmt = select(SessionModel).where(SessionModel.id == session_id)
+    def find_by_id(self, session_id: int, user_id: int) -> SessionModel | None:
+        stmt = select(SessionModel).where(
+            SessionModel.id == session_id,
+            SessionModel.user_id == user_id,
+        )
         return self.db.scalars(stmt).first()
 
     def update(self, session: SessionModel, data: dict[str, Any]) -> SessionModel:
@@ -43,30 +50,24 @@ class SessionRepository:
         self.db.delete(session)
         self.db.flush()
 
-    def count_all(self) -> int:
-        stmt = select(func.count(SessionModel.id))
+    def count_all(self, user_id: int) -> int:
+        stmt = select(func.count(SessionModel.id)).where(SessionModel.user_id == user_id)
         return int(self.db.execute(stmt).scalar() or 0)
 
-    def get_total_duration(self) -> int:
-        stmt = select(func.coalesce(func.sum(SessionModel.duration), 0))
+    def get_total_duration(self, user_id: int) -> int:
+        stmt = select(func.coalesce(func.sum(SessionModel.duration), 0)).where(
+            SessionModel.user_id == user_id
+        )
         return int(self.db.execute(stmt).scalar() or 0)
 
-    def get_sessions_by_topic(self) -> list[dict[str, Any]]:
-        # Assuming topic is not yet in model, returning empty or removing if not needed.
-        # But keeping structure if it was intended.
-        # If topic doesn't exist in model, this will fail too.
-        # Checking model... Session model has no topic.
-        # I will comment this out or remove it to avoid errors if called.
-        # But get_stats doesn't call it.
-        return []
-
-    def get_daily_activity(self) -> list[dict[str, Any]]:
+    def get_daily_activity(self, user_id: int) -> list[dict[str, Any]]:
         stmt = (
             select(
                 func.date(SessionModel.created_at).label("date"),
                 func.count(SessionModel.id).label("count"),
                 func.sum(SessionModel.duration).label("totalDuration"),
             )
+            .where(SessionModel.user_id == user_id)
             .group_by(func.date(SessionModel.created_at))
             .order_by(func.date(SessionModel.created_at).asc())
         )
@@ -75,5 +76,3 @@ class SessionRepository:
             {"date": row.date, "count": int(row.count), "totalDuration": int(row.totalDuration)}
             for row in results
         ]
-
-

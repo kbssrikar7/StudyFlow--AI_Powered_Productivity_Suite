@@ -17,33 +17,30 @@ class AnalyticsService:
         self.snippet_repo = snippet_repo
         self.session_repo = session_repo
 
-    def get_dashboard_stats(self) -> dict[str, Any]:
-        sessions = self.session_repo.find_all()
-        total_snippets = self.snippet_repo.count_all()
+    def get_dashboard_stats(self, user_id: int) -> dict[str, Any]:
+        sessions = self.session_repo.find_all(user_id)
+        total_snippets = self.snippet_repo.count_all(user_id)
         total_sessions = len(sessions)
         total_study_time = sum(session.duration for session in sessions)
-        sessions_by_topic = self.session_repo.get_sessions_by_topic()
         recent_activity = self._build_recent_activity(sessions)
         return {
-            "totalSnippets": total_snippets,
-            "totalSessions": total_sessions,
-            "totalStudyTime": total_study_time,
-            "sessionsByTopic": sessions_by_topic,
-            "recentActivity": recent_activity,
+            "total_snippets": total_snippets,
+            "total_sessions": total_sessions,
+            "total_study_time": total_study_time,
+            "sessions_by_topic": [],
+            "recent_activity": recent_activity,
         }
 
     def _build_recent_activity(self, sessions) -> list[dict[str, Any]]:
-        activity = defaultdict(lambda: {"sessionCount": 0, "duration": 0})
+        activity = defaultdict(lambda: {"session_count": 0, "duration": 0})
         for session in sessions:
-            # Use created_at instead of date, and ensure it's a date object
-            if hasattr(session, 'created_at') and session.created_at:
+            if hasattr(session, "created_at") and session.created_at:
                 activity_date = session.created_at.date()
-            elif hasattr(session, 'date'): # Fallback if date exists (unlikely based on model)
-                 activity_date = self._parse_date(session.date)
+            elif hasattr(session, "date"):
+                activity_date = self._parse_date(session.date)
             else:
                 continue
-
-            activity[activity_date]["sessionCount"] += 1
+            activity[activity_date]["session_count"] += 1
             activity[activity_date]["duration"] += session.duration
         return [
             {"date": activity_date, **metrics}
@@ -55,7 +52,4 @@ class AnalyticsService:
         try:
             return datetime.fromisoformat(date_str).date()
         except ValueError:
-            # Fallback to today's date if parsing fails.
             return date.today()
-
-

@@ -17,33 +17,23 @@ async function handleResponse(response) {
         } catch {
             errorData = { detail: 'An error occurred' };
         }
-
         throw new APIError(
             errorData.detail || `HTTP Error ${response.status}`,
             response.status,
             errorData
         );
     }
-
-    // Handle 204 No Content
-    if (response.status === 204) {
-        return null;
-    }
-
+    if (response.status === 204) return null;
     return response.json();
 }
 
 export const api = {
     async get(endpoint) {
-        const token = localStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-        };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'GET',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
             });
             return handleResponse(response);
         } catch (error) {
@@ -53,15 +43,11 @@ export const api = {
     },
 
     async post(endpoint, data) {
-        const token = localStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-        };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'POST',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             return handleResponse(response);
@@ -71,39 +57,12 @@ export const api = {
         }
     },
 
-    async postForm(endpoint, data) {
-        const headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        };
-
-        const formData = new URLSearchParams();
-        for (const key in data) {
-            formData.append(key, data[key]);
-        }
-
-        try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                method: 'POST',
-                headers,
-                body: formData,
-            });
-            return handleResponse(response);
-        } catch (error) {
-            if (error instanceof APIError) throw error;
-            throw new APIError('Network error', 0, { detail: error.message });
-        }
-    },
-
     async put(endpoint, data) {
-        const token = localStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-        };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'PUT',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             return handleResponse(response);
@@ -114,15 +73,11 @@ export const api = {
     },
 
     async delete(endpoint) {
-        const token = localStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-        };
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'DELETE',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
             });
             return handleResponse(response);
         } catch (error) {

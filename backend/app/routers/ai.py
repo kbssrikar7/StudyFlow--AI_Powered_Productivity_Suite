@@ -1,3 +1,4 @@
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -7,6 +8,9 @@ from ..services.ai_service import ai_service
 from ..models.session import Session as SessionModel
 
 router = APIRouter()
+
+# Global connection pool — reused across requests instead of opening a new connection each time
+_http_client = httpx.AsyncClient(timeout=30.0)
 
 class AnalyzeRequest(BaseModel):
     limit: Optional[int] = 20
@@ -138,88 +142,49 @@ async def get_motivation(request: MotivationRequest):
 async def test_groq():
     """Test Groq API connectivity"""
     import os
-    import httpx
-    
     api_key = os.getenv("GROQ_API_KEY")
-    
     if not api_key:
         return {"status": "error", "message": "GROQ_API_KEY not found in environment"}
-    
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "llama-3.3-70b-versatile",
-                    "messages": [{"role": "user", "content": "Say hello"}],
-                    "max_tokens": 50
-                }
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                return {
-                    "status": "success",
-                    "response": data["choices"][0]["message"]["content"],
-                    "api_key_prefix": api_key[:10] + "..."
-                }
-            else:
-                return {
-                    "status": "error",
-                    "code": response.status_code,
-                    "message": response.text
-                }
+        response = await _http_client.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": "Say hello"}], "max_tokens": 50}
+        )
+        if response.status_code == 200:
+            data = response.json()
+            return {"status": "success", "response": data["choices"][0]["message"]["content"], "api_key_prefix": api_key[:10] + "..."}
+        else:
+            return {"status": "error", "code": response.status_code, "message": response.text}
     except Exception as e:
-        return {
-            "status": "error",
-            "exception": str(e),
-            "type": type(e).__name__
-        }
+        return {"status": "error", "exception": str(e), "type": type(e).__name__}
+
 
 @router.get("/chat")
 async def chat(message: str):
     """Simple chat with AI"""
     import os
-    import httpx
-    
     api_key = os.getenv("GROQ_API_KEY")
-    
     if not api_key:
         return {"response": "Groq API Key not configured.", "user_message": message}
-    
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "llama-3.3-70b-versatile",
-                    "messages": [
-                        {"role": "system", "content": "You are a helpful study assistant. Keep responses concise and practical."},
-                        {"role": "user", "content": message}
-                    ],
-                    "max_tokens": 300,
-                    "temperature": 0.7
-                }
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                return {
-                    "response": data["choices"][0]["message"]["content"],
-                    "user_message": message
-                }
-            else:
-                return {"response": f"API Error: {response.status_code}", "user_message": message}
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error in chat: {str(e)}"
+        response = await _http_client.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "llama-3.3-70b-versatile",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful study assistant. Keep responses concise and practical."},
+                    {"role": "user", "content": message}
+                ],
+                "max_tokens": 300,
+                "temperature": 0.7
+            }
         )
+        if response.status_code == 200:
+            data = response.json()
+            return {"response": data["choices"][0]["message"]["content"], "user_message": message}
+        else:
+            return {"response": f"API Error: {response.status_code}", "user_message": message}
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error in chat: {str(e)}")

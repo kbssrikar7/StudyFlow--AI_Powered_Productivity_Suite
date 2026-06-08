@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import String, Integer, DateTime, Text
+from sqlalchemy import ForeignKey, String, Integer, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from ..database import Base
@@ -15,3 +15,4 @@ class Task(Base):
     priority: Mapped[str] = mapped_column(String, default="medium") # low, medium, high
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, index=True)

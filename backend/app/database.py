@@ -11,7 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Iterator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from sqlalchemy.pool import StaticPool
@@ -65,9 +65,42 @@ def create_all_tables() -> None:
             print(f"Warning: Could not create database directory: {e}")
 
     # Import models inside the function to avoid circular dependencies.
-    from .models import snippet, session, user  # noqa: F401  # pylint: disable=unused-import
+    from .models import snippet, session, user, task  # noqa: F401  # pylint: disable=unused-import
 
     Base.metadata.create_all(bind=engine)
+
+
+_is_sqlite = settings.database_url.startswith("sqlite")
+
+
+def add_missing_columns() -> None:
+    """Idempotently add new columns to existing tables without Alembic."""
+    migrations = [
+        # User auth fields
+        ("users", "username", "VARCHAR"),
+        ("users", "hashed_password", "VARCHAR"),
+        ("users", "is_verified", "BOOLEAN DEFAULT FALSE"),
+        ("users", "verification_token", "VARCHAR"),
+        ("users", "verification_token_expires", "TIMESTAMP WITH TIME ZONE" if not _is_sqlite else "DATETIME"),
+        # Data isolation fields
+        ("sessions", "user_id", "INTEGER REFERENCES users(id)"),
+        ("snippets", "user_id", "INTEGER REFERENCES users(id)"),
+        ("tasks", "user_id", "INTEGER REFERENCES users(id)"),
+    ]
+    with engine.connect() as conn:
+        for table, column, col_type in migrations:
+            if _is_sqlite:
+                try:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}"))
+                    conn.commit()
+                except Exception:
+                    pass  # column already exists
+            else:
+                try:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {column} {col_type}"))
+                    conn.commit()
+                except Exception as e:
+                    print(f"[migration] Warning for {table}.{column}: {e}")
 
 
 def get_db() -> Iterator[Session]:
