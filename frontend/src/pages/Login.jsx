@@ -153,136 +153,119 @@ const Login = () => {
 
                         {/* Sign In */}
                         {mode === 'signin' && (
-                            <div className="space-y-4">
-                                <form onSubmit={handleSignIn} className="space-y-3">
-                                    <input
-                                        type="email"
-                                        placeholder="Email address"
-                                        value={signInEmail}
-                                        onChange={(e) => setSignInEmail(e.target.value)}
-                                        required
-                                        className={inputClass}
-                                    />
-                                    <input
-                                        type="password"
-                                        placeholder="Password"
-                                        value={signInPassword}
-                                        onChange={(e) => setSignInPassword(e.target.value)}
-                                        required
-                                        className={inputClass}
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={signInLoading}
-                                        className="w-full bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white py-3 text-sm font-semibold uppercase tracking-widest transition-colors"
-                                    >
-                                        {signInLoading ? 'Signing in…' : 'Initialize Session'}
-                                    </button>
-                                </form>
-
-                                <OrDivider />
-
-                                <div className="flex justify-center">
-                                    <GoogleLogin
-                                        onSuccess={handleGoogleSuccess}
-                                        onError={() => toast.error('Google Sign In failed')}
-                                        theme="filled_black"
-                                        shape="pill"
-                                        size="large"
-                                        useOneTap={false}
-                                    />
-                                </div>
-                            </div>
+                            <form onSubmit={handleSignIn} className="space-y-3">
+                                <input
+                                    type="email"
+                                    placeholder="Email address"
+                                    value={signInEmail}
+                                    onChange={(e) => setSignInEmail(e.target.value)}
+                                    required
+                                    className={inputClass}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={signInPassword}
+                                    onChange={(e) => setSignInPassword(e.target.value)}
+                                    required
+                                    className={inputClass}
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={signInLoading}
+                                    className="w-full bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white py-3 text-sm font-semibold uppercase tracking-widest transition-colors"
+                                >
+                                    {signInLoading ? 'Signing in…' : 'Initialize Session'}
+                                </button>
+                            </form>
                         )}
 
                         {/* Register */}
                         {mode === 'register' && (
-                            <div className="space-y-4">
-                                <form onSubmit={handleRegister} className="space-y-3">
-                                    <input
-                                        type="text"
-                                        placeholder="Username (min 3 characters)"
-                                        value={regUsername}
-                                        onChange={(e) => setRegUsername(e.target.value)}
-                                        required
-                                        minLength={3}
-                                        maxLength={50}
-                                        className={inputClass}
-                                    />
-                                    <input
-                                        type="email"
-                                        placeholder="Email address"
-                                        value={regEmail}
-                                        onChange={(e) => setRegEmail(e.target.value)}
-                                        required
-                                        className={inputClass}
-                                    />
-                                    <div>
-                                        <input
-                                            type="password"
-                                            placeholder="Password"
-                                            value={regPassword}
-                                            onChange={(e) => setRegPassword(e.target.value)}
-                                            onFocus={() => setPasswordFocused(true)}
-                                            required
-                                            className={inputClass}
-                                        />
-                                        {(passwordFocused || regPassword) && (
-                                            <div className="mt-2 space-y-1 px-1">
-                                                {REQUIREMENTS.map((req) => {
-                                                    const met = req.test(regPassword);
-                                                    return (
-                                                        <div key={req.label} className="flex items-center gap-2 text-xs">
-                                                            <span className={met ? 'text-green-400' : 'text-red-400'}>
-                                                                {met ? '✓' : '✗'}
-                                                            </span>
-                                                            <span className={met ? 'text-green-400' : 'text-slate-400'}>
-                                                                {req.label}
-                                                            </span>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
+                            <form onSubmit={handleRegister} className="space-y-3">
+                                <input
+                                    type="text"
+                                    placeholder="Username (min 3 characters)"
+                                    value={regUsername}
+                                    onChange={(e) => setRegUsername(e.target.value)}
+                                    required
+                                    minLength={3}
+                                    maxLength={50}
+                                    className={inputClass}
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Email address"
+                                    value={regEmail}
+                                    onChange={(e) => setRegEmail(e.target.value)}
+                                    required
+                                    className={inputClass}
+                                />
+                                <div>
                                     <input
                                         type="password"
-                                        placeholder="Confirm password"
-                                        value={regConfirm}
-                                        onChange={(e) => setRegConfirm(e.target.value)}
+                                        placeholder="Password"
+                                        value={regPassword}
+                                        onChange={(e) => setRegPassword(e.target.value)}
+                                        onFocus={() => setPasswordFocused(true)}
                                         required
-                                        className={`${inputClass} ${
-                                            regConfirm && regConfirm !== regPassword
-                                                ? 'border-red-500/50'
-                                                : ''
-                                        }`}
+                                        className={inputClass}
                                     />
-                                    {regConfirm && regConfirm !== regPassword && (
-                                        <p className="text-xs text-red-400 px-1">Passwords do not match</p>
+                                    {(passwordFocused || regPassword) && (
+                                        <div className="mt-2 space-y-1 px-1">
+                                            {REQUIREMENTS.map((req) => {
+                                                const met = req.test(regPassword);
+                                                return (
+                                                    <div key={req.label} className="flex items-center gap-2 text-xs">
+                                                        <span className={met ? 'text-green-400' : 'text-red-400'}>
+                                                            {met ? '✓' : '✗'}
+                                                        </span>
+                                                        <span className={met ? 'text-green-400' : 'text-slate-400'}>
+                                                            {req.label}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     )}
-                                    <button
-                                        type="submit"
-                                        disabled={regLoading}
-                                        className="w-full bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white py-3 text-sm font-semibold uppercase tracking-widest transition-colors"
-                                    >
-                                        {regLoading ? 'Creating account…' : 'Create Account'}
-                                    </button>
-                                </form>
-
-                                <OrDivider />
-
-                                <div className="flex justify-center">
-                                    <GoogleLogin
-                                        onSuccess={handleGoogleSuccess}
-                                        onError={() => toast.error('Google Sign In failed')}
-                                        theme="filled_black"
-                                        shape="pill"
-                                        size="large"
-                                        useOneTap={false}
-                                    />
                                 </div>
-                            </div>
+                                <input
+                                    type="password"
+                                    placeholder="Confirm password"
+                                    value={regConfirm}
+                                    onChange={(e) => setRegConfirm(e.target.value)}
+                                    required
+                                    className={`${inputClass} ${
+                                        regConfirm && regConfirm !== regPassword
+                                            ? 'border-red-500/50'
+                                            : ''
+                                    }`}
+                                />
+                                {regConfirm && regConfirm !== regPassword && (
+                                    <p className="text-xs text-red-400 px-1">Passwords do not match</p>
+                                )}
+                                <button
+                                    type="submit"
+                                    disabled={regLoading}
+                                    className="w-full bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white py-3 text-sm font-semibold uppercase tracking-widest transition-colors"
+                                >
+                                    {regLoading ? 'Creating account…' : 'Create Account'}
+                                </button>
+                            </form>
                         )}
+
+                        {/* Single shared Google button — rendered once to avoid SDK re-initialization */}
+                        <OrDivider />
+                        <div className="flex justify-center">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={() => toast.error('Google Sign In failed')}
+                                theme="filled_black"
+                                shape="pill"
+                                size="large"
+                                useOneTap={false}
+                            />
+                        </div>
                     </>
                 )}
             </div>
