@@ -16,7 +16,7 @@ from ..utils.email import send_verification_email
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", os.getenv("VITE_GOOGLE_CLIENT_ID", ""))
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://studyflow-app-pearl.vercel.app")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://studyflow-app-kbssrikar7s-projects.vercel.app")
 
 
 def _set_auth_cookie(response: Response, user_email: str):
