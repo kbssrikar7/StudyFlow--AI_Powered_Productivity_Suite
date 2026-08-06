@@ -269,6 +269,15 @@ const Login = () => {
                     </>
                 )}
             </div>
+
+            <a
+                href="https://github.com/kbssrikar7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-4 z-10 text-slate-500 hover:text-red-400 text-xs uppercase tracking-widest transition-colors"
+            >
+                Done by kbssrikar
+            </a>
         </div>
     );
 };
