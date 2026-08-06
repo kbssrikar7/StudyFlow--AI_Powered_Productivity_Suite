@@ -274,7 +274,7 @@ const Login = () => {
                 href="https://github.com/kbssrikar7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-4 z-10 text-slate-500 hover:text-red-400 text-xs uppercase tracking-widest transition-colors"
+                className="absolute bottom-4 z-10 text-slate-500 hover:text-red-400 text-sm uppercase tracking-widest transition-colors underline underline-offset-4 decoration-slate-600 hover:decoration-red-400"
             >
                 Done by kbssrikar
             </a>
