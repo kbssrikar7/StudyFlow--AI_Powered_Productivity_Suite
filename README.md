@@ -2,7 +2,7 @@
 
 A full-stack productivity application for focused study sessions, task management, and AI-assisted learning. Built with React and FastAPI, featuring a dark-themed UI inspired by productivity tools.
 
-**Live Demo**: https://studyflow-nctjszjb5-kbssrikar7s-projects.vercel.app
+**Live Demo**: https://studyflow-app-pearl.vercel.app/
 
 **Login Credentials**: `admin@admin.com` / `admin`
 
