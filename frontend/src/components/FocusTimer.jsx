@@ -18,11 +18,9 @@ const FocusTimer = ({ onComplete }) => {
         setDuration
     } = useTimerStore();
 
-    const audioRef = useRef(null);
     const completionHandledRef = useRef(false);
 
     useEffect(() => {
-        audioRef.current = new Audio('/sounds/notification.mp3');
         return () => {
             if (isRunning) pauseTimer();
         };
@@ -39,10 +37,6 @@ const FocusTimer = ({ onComplete }) => {
 
     const handleTimerComplete = async () => {
         try {
-            if (audioRef.current) {
-                audioRef.current.play().catch(err => console.warn('Sound error:', err));
-            }
-
             if (sessionId) {
                 await api.put(`/sessions/${sessionId}`, {
                     completed: true,
