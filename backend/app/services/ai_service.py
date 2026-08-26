@@ -8,7 +8,7 @@ from ..config import settings
 class AIService:
     def __init__(self):
         self._client = None
-        self.model = "llama-3.3-70b-versatile"  # Fast and powerful
+        self.model = "openai/gpt-oss-120b"  # Fast and powerful
     
     @property
     def client(self):

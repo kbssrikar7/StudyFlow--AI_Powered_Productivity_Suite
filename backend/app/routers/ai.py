@@ -149,7 +149,7 @@ async def test_groq():
         response = await _http_client.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": "Say hello"}], "max_tokens": 50}
+            json={"model": "openai/gpt-oss-120b", "messages": [{"role": "user", "content": "Say hello"}], "max_tokens": 50}
         )
         if response.status_code == 200:
             data = response.json()
@@ -172,7 +172,7 @@ async def chat(message: str):
             "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama-3.3-70b-versatile",
+                "model": "openai/gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": "You are a helpful study assistant. Keep responses concise and practical."},
                     {"role": "user", "content": message}
